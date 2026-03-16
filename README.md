@@ -1,77 +1,83 @@
-# Weather App
+# Weather Telegram Bot
 
-CLI-приложение для получения текущей погоды через [OpenWeather](https://openweathermap.org/): геокодинг по названию города и запрос погоды по координатам.
+Учебный Telegram‑бот на Python, который показывает погоду через OpenWeather и предоставляет удобный интерфейс в Telegram: текущая погода, прогноз, геолокация, сравнение городов, качество воздуха и уведомления.
 
-## Требования
+## Features
 
-- Python 3.10+
-- Ключ API OpenWeather (бесплатный на [openweathermap.org/api](https://openweathermap.org/api))
+- **Текущая погода по городу**: температура, «ощущается как», давление, влажность, ветер, облачность, восход/закат.
+- **Прогноз на 5 дней**: 3‑часовой прогноз с выбором даты через inline‑клавиатуру и кнопками «Назад» / «Закрыть».
+- **Геолокация**: приём `location` из Telegram и показ погоды в текущей точке.
+- **Уведомления**: подписка на погодные уведомления с выбором интервала (1 / 2 / 3 / 6 часов).
+- **Сравнение городов**: сравнение температуры и влажности в двух городах в табличном виде (`<pre>`).
+- **Расширенные данные**: ввод города или координат (`"53.9, 27.56"` или `"53.9 27.56"`), детальная информация по погоде и времени восхода/заката.
+- **Качество воздуха**: запрос Air Pollution API, анализ загрязнителей (PM2.5, PM10, NO₂, O₃, SO₂, CO) и сводный вывод на русском.
 
-## Установка
+## Technologies
 
-1. Клонируйте репозиторий и перейдите в каталог проекта.
+- **Python**
+- **Telegram Bot API** (через библиотеку `pyTelegramBotAPI`)
+- **OpenWeather API** (Current Weather, Forecast, Air Pollution)
+- **python-dotenv** (загрузка переменных окружения из `.env`)
 
-2. Создайте виртуальное окружение и активируйте его:
+## Installation
 
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # Linux/macOS
-   source venv/bin/activate
-   ```
-
-3. Установите зависимости:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Создайте файл `.env` в корне проекта и укажите ключ API:
-
-   ```
-   API_KEY=ваш_ключ_openweather
-   ```
-
-   Ключ можно получить после регистрации на [OpenWeather](https://openweathermap.org/api).
-
-## Запуск
+### Clone repository
 
 ```bash
-python weather_app.py
+git clone https://github.com/TatsianaU/Weather-app.git
+cd Weather-app
 ```
 
-В меню выберите режим:
-- **1** — погода по названию города (ввод города → геокодинг → погода);
-- **2** — погода по координатам (широта и долгота);
-- **0** — выход.
+### Create and activate virtual environment
 
-Пример вывода:
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux / macOS
+source venv/bin/activate
 ```
-Погода в Москва: 12.4°C, пасмурно
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
 ```
 
-## Возможности
+### Configure environment variables
 
-- **Геокодинг** — поиск координат по названию города (OpenWeather Geocoding API, limit=1).
-- **Текущая погода** — по координатам, единицы: метрические, язык описаний: русский.
-- **Обработка ошибок** — понятные сообщения без трейсбеков (нет ключа, неверный ключ, город не найден, ошибки сети/API).
-- **Кэширование** — последний успешный ответ сохраняется в `weather_cache.json` (город, координаты, время запроса). При сетевой ошибке предлагается вывести данные из кэша, если им меньше 3 часов.
-- **Повторы запросов** — при коде 429 или временных сетевых сбоях до 3 попыток с паузами 1 с, 2 с, 4 с.
+Скопируйте пример `.env`:
 
-## Зависимости
+```bash
+# Windows
+copy .env.example .env
 
-- `requests` — HTTP-запросы к API.
-- `python-dotenv` — загрузка переменных из `.env`.
-
-## Структура
-
+# Linux / macOS
+cp .env.example .env
 ```
-Weather_app/
-├── .env                 # API_KEY (не коммитить)
-├── .gitignore
-├── README.md
-├── requirements.txt
-├── weather_app.py       # основной модуль и CLI
-└── weather_cache.json   # кэш (создаётся при работе)
+
+Откройте `.env` и подставьте свои значения:
+
+```text
+OW_API_KEY=your_openweather_key
+BOT_TOKEN=your_telegram_token
 ```
+
+## Usage
+
+### Run bot
+
+```bash
+python bot.py
+```
+
+В Telegram найдите своего бота по имени, отправьте команду `/start` и используйте главное меню с кнопками:
+
+- `☀️ Текущая погода по городу`
+- `📍 Погода по геолокации`
+- `📅 Прогноз на 5 дней`
+- `🔔 Погодные уведомления`
+- `📊 Сравнение городов`
+- `🌈 Расширенные данные`
